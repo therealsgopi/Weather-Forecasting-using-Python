@@ -5,11 +5,12 @@ from geopy.geocoders import Nominatim
 from tkinter import ttk, messagebox
 from timezonefinder import TimezoneFinder
 from datetime import *
-from datetime import timedelta
 import requests
 import pytz
 import math
 from PIL import Image, ImageTk
+import pandas as pd
+
 
 root=Tk()
 root.title("Weather App")
@@ -38,15 +39,20 @@ def getWeather():
     api = base_url + "appid=" + api_key + "&q=" + city
     response = requests.get(api)
     json_data = response.json()
-    print(json_data)
+    # print(json_data)
 
     base_url2 = "https://api.openweathermap.org/data/2.5/onecall"
     latitude = location.latitude
     longitude = location.longitude
-    api_2 = f"http://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&exclude=hourly,daily&appid={api_key}"
+    # api_2 = f"http://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&exclude=hourly,daily&appid={api_key}"
+    api_2 = f"https://api.openweathermap.org/data/2.5/forecast?lat={latitude}&lon={longitude}&appid={api_key}"
     response_2 = requests.get(api_2)
     json_data2 = response_2.json()
-    print(json_data2)
+    df1 = pd.json_normalize(json_data2['list'])
+    # df1 = pd.json_normalize(json_data2['list'][0])
+    # df1 = pd.json_normalize(json_data2['list'][0])
+    # print(json_data2)
+    # print(df1)
 
 
     #current
@@ -58,36 +64,36 @@ def getWeather():
     
     t.config(text=(math.ceil(current_temp-273.15),"°C"))
     h.config(text=(humidity, "%"))
-    p.config(text=(pressure, "hPa"))    
+    p.config(text=(pressure, "hPa"))
     w.config(text=(wind,"m/s"))
     d.config(text=description)
 
     #first cell
-    firstdayimage = json_data2['daily'][0]['weather'][0]['icon']
+    firstdayimage = json_data2['list'][0]['weather'][0]['icon']
     print(firstdayimage)
 
     #second cell
-    seconddayimage = json_data2['daily'][1]['weather'][0]['icon']
+    seconddayimage = json_data2['list'][1]['weather'][0]['icon']
     print(seconddayimage)
 
     #third cell
-    thirddayimage = json_data2['daily'][2]['weather'][0]['icon']
+    thirddayimage = json_data2['list'][2]['weather'][0]['icon']
     print(thirddayimage)
 
     #fourth cell
-    fourthdayimage = json_data2['daily'][3]['weather'][0]['icon']
+    fourthdayimage = json_data2['list'][3]['weather'][0]['icon']
     print(fourthdayimage)
 
     #fifth cell
-    fifthdayimage = json_data2['daily'][4]['weather'][0]['icon']
+    fifthdayimage = json_data2['list'][4]['weather'][0]['icon']
     print(fifthdayimage)
 
     #sixth cell
-    sixthdayimage = json_data2['daily'][5]['weather'][0]['icon']
+    sixthdayimage = json_data2['list'][5]['weather'][0]['icon']
     print(sixthdayimage)
 
     #seventh cell
-    seventhdayimage = json_data2['daily'][6]['weather'][0]['icon']
+    seventhdayimage = json_data2['list'][6]['weather'][0]['icon']
     print(seventhdayimage)
 
     #days
@@ -263,5 +269,6 @@ day7.place(x=10, y=5)
 
 seventhimage = Label(seventhframe, bg='#282829')
 seventhimage.place(x=7, y=20)
+
 
 root.mainloop()
