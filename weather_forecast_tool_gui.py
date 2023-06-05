@@ -54,7 +54,7 @@ def getWeather():
     api_2 = f"https://api.openweathermap.org/data/2.5/forecast?lat={latitude}&lon={longitude}&units=metric&appid={api_key}"
     response_2 = requests.get(api_2)
     json_data2 = response_2.json()
-    print(json_data2)
+    # print(json_data2)
 
 
     #current
