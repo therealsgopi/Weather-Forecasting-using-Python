@@ -48,7 +48,7 @@ def parse_weather_data(weather_data):
         }
         return weather_info
     else:
-        print("Error occurred while fetching weather forecast for {}: {}".format("city", weather_data['message']))
+        print("Error occurred while fetching weather forecast : {}".format(weather_data['message']))
         sys.exit(1)
 
 def display_weather_forecast(weather_forecast):
